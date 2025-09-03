@@ -2,10 +2,10 @@
   "name": "servicio_con_nodejs_http",
   "version": "1.0.0",
   "description": "",
-  "main": "src/Tarea_3_Async/Async.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon node src/Tarea_3_Async/Async.js"
+    "dev": "nodemon node index.js"
   },
   "keywords": [],
   "author": "",
