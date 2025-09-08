@@ -1,10 +1,12 @@
 const express = require('express');
+const sequelize = require('sequelize')
 let app = express();
 const port = 3000;
-const userRoutes = require('./src/routes/userRoutes');
+require('dotenv').config();
+const routes = require('./src/routes/public')
 
-
-app.use('/users', userRoutes);
+app.use(express.json());
+app.use('/users', routes);
 
 app.listen(port, () => {
   console.log("servidor corriendo en el puerto " + port);
