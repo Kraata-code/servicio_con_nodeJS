@@ -1,4 +1,4 @@
-const users = require('../models/userModel');
+const users = require('../models/Modeluser');
 
 var express = require("express");
 var app = express();

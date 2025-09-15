@@ -1,4 +1,4 @@
-const users = require('../models/userModel');
+const users = require('../models/Modeluser');
 const product = { name: 'PC master race', price: 30000, weight: '20kg' }
 const http = require('http');
 const port = 3000

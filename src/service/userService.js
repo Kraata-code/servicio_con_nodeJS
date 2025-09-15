@@ -1,4 +1,4 @@
-const users = require('../models/userModel');
+const users = require('../models/Modeluser');
 
 async function getUsers() {
   return new Promise((resolve) => {
