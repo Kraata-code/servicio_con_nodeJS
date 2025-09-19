@@ -2,7 +2,7 @@ const express = require('express');
 let app = express();
 const port = 3000;
 require('dotenv').config();
-const routes = require('./src/routes/public')
+const routes = require('./src/routes/api/auth')
 
 app.use(express.json());
 app.use('/users', routes);

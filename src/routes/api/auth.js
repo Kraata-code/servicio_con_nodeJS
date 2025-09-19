@@ -1,20 +1,40 @@
-const users = require('../models/Modeluser');
-const express = require('express');
+const users = require("../../models/Modeluser");
+const express = require("express");
 const router = express.Router();
-require('dotenv').config();
+const { body } = require("express-validator");
+const userController = require("../../controller/userController");
+const rules = [
+  body("email")
+    .escape()
+    .notEmpty()
+    .withMessage("Campo vacio")
+    .isEmail()
+    .withMessage("El correo no es validso"),
+  body("password")
+    .escape()
+    .notEmpty()
+    .withMessage("Campo vacio")
+    .isLength({ min: 8 })
+    .withMessage("La contraseña debe contener 8 caracteres"),
+];
+require("dotenv").config();
 
-router.get('/test', async (req, res) => {
-    try {
-        const foundUsers = users.filter(user => user.password === req.query.password);
+// router.get("/test", rules, async (req, res) => {
+//   try {
+//     const foundUsers = users.filter(
+//       (user) => user.password === req.query.password
+//     );
 
-        if (foundUsers.length === 0) {
-            return res.status(404).json({ error: 'No se encontraron usuarios' });
-        }
+//     if (foundUsers.length === 0) {
+//       return res.status(404).json({ error: "No se encontraron usuarios" });
+//     }
 
-        res.status(200).json(foundUsers); 
-    } catch (err) {
-        res.status(500).json({ error: 'Error interno en /test' });
-    }
-});
+//     res.status(200).json(foundUsers);
+//   } catch (err) {
+//     res.status(500).json({ error: "Error interno en /test" });
+//   }
+// });
+
+router.post("/", rules, userController);
 
 module.exports = router;
