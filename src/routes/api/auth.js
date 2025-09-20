@@ -2,16 +2,16 @@ const users = require("../../models/Modeluser");
 const express = require("express");
 const router = express.Router();
 const { body } = require("express-validator");
-const userController = require("../../controller/userController");
+// const userController = require("../../controller/userController");
+const { userController, getUsername } = require("../../controller/userController");
 const rules = [
   body("email")
-    .escape()
     .notEmpty()
     .withMessage("Campo vacio")
     .isEmail()
-    .withMessage("El correo no es validso"),
+    .withMessage("El correo no es validso")
+    .normalizeEmail(),
   body("password")
-    .escape()
     .notEmpty()
     .withMessage("Campo vacio")
     .isLength({ min: 8 })
@@ -36,5 +36,6 @@ require("dotenv").config();
 // });
 
 router.post("/", rules, userController);
+router.post("/username", rules,getUsername);
 
 module.exports = router;
