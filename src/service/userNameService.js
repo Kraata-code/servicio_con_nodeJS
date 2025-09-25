@@ -1,12 +1,19 @@
-const users = require("../models/Modeluser");
+const User = require("../models/ModeloTest");
 
-async function getUsernameByEmail (email){
-    // const user = users.findAll((u)=> u.email === email);
-    // if(!user){
-    //     throw new Error('Usuario no encontrado');
-    // }
-    // return{nombre: user.nombre};
-    return "Hola mundo desde el servicio para obtener usuario";
-};
+async function getUsernameByEmail(email) {
+    try {
+        const user = await User.findOne({
+            where: { email: email },
+            attributes: ['username', 'email'] 
+        });
+        
+        if (!user) {
+            throw new Error('Usuario no encontrado');
+        }
+        return user;
+    } catch (error) {
+        throw new Error('Error al buscar el usuario: ' + error.message);
+    }
+}
 
 module.exports = { getUsernameByEmail };

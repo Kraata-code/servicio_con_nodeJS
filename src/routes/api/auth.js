@@ -2,20 +2,23 @@ const users = require("../../models/Modeluser");
 const express = require("express");
 const router = express.Router();
 const { body } = require("express-validator");
+const validator = require("../../middleware/validator")
 // const userController = require("../../controller/userController");
 const { userController, getUsername } = require("../../controller/userController");
 const rules = [
   body("email")
     .notEmpty()
     .withMessage("Campo vacio")
+    .isLength({ max: 30})
     .isEmail()
     .withMessage("El correo no es validso")
     .normalizeEmail(),
   body("password")
     .notEmpty()
     .withMessage("Campo vacio")
-    .isLength({ min: 8 })
-    .withMessage("La contraseña debe contener 8 caracteres"),
+    .isString()
+    .isLength({ min: 8, max: 15})
+    .withMessage("La contraseña debe contener 8 caracteres")
 ];
 require("dotenv").config();
 
@@ -35,7 +38,12 @@ require("dotenv").config();
 //   }
 // });
 
-router.post("/", rules, userController);
-router.post("/username", rules,getUsername);
+router.post("/", rules,validator,userController);
+router.post("/username",body("email")
+    .notEmpty()
+    .withMessage("Campo vacio")
+    .isEmail()
+    .withMessage("El correo no es validso")
+    .normalizeEmail(),validator,getUsername);
 
 module.exports = router;

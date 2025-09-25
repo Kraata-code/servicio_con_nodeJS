@@ -3,10 +3,6 @@ const { validationResult } = require("express-validator");
 const { getUsernameByEmail} = require('../service/userNameService')
 
 async function userController(req, res) {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errores: errors.array() });
-  }
   try {
    const data = await userService();
     res.send(data);
@@ -16,10 +12,6 @@ async function userController(req, res) {
 }
 
 async function getUsername(req, res) {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errores: errors.array() });
-  }
   try {
     const { email } = req.body;
     const nombre = await getUsernameByEmail(email);
