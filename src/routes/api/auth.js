@@ -5,6 +5,8 @@ const { body } = require("express-validator");
 const validator = require("../../middleware/validator")
 // const userController = require("../../controller/userController");
 const { userController, getUsername } = require("../../controller/userController");
+const verifyToken = require("../../middleware/token")
+const hashPassword = require("../../middleware/bcrypt")
 const rules = [
   body("email")
     .notEmpty()
@@ -38,12 +40,12 @@ require("dotenv").config();
 //   }
 // });
 
-router.post("/", rules,validator,userController);
+router.post("/", rules,validator,hashPassword,userController);
 router.post("/username",body("email")
     .notEmpty()
     .withMessage("Campo vacio")
     .isEmail()
     .withMessage("El correo no es validso")
-    .normalizeEmail(),validator,getUsername);
+    .normalizeEmail(),validator,verifyToken,getUsername);
 
 module.exports = router;
