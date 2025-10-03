@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
@@ -6,7 +7,7 @@ const authenticateToken = (req, res, next) => {
     if (!token){
         return res.status(403).json({message: 'No token provided'});
     }
-    jwt.verify(token,(err,decoded)=>{
+    jwt.verify(token,process.env.SECRET_KEY,(err,decoded)=>{
         if (err){
             return res.status(401).json({message: 'Failed to authenticate token'});
         }

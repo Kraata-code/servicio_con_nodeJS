@@ -1,17 +1,25 @@
+// Ruta de prueba para comparar el token con SECRET_KEY
+const jwt = require('jsonwebtoken');
+
 const users = require("../../models/Modeluser");
 const express = require("express");
 const router = express.Router();
 const { body } = require("express-validator");
-const validator = require("../../middleware/validator")
+const validator = require("../../middleware/validator");
+const { loginController } = require('../../controller/userController');
 // const userController = require("../../controller/userController");
-const { userController, getUsername } = require("../../controller/userController");
-const verifyToken = require("../../middleware/token")
-const hashPassword = require("../../middleware/bcrypt")
+const {
+  userController,
+  getUsername,
+  login,
+} = require("../../controller/userController");
+const verifyToken = require("../../middleware/token");
+const hashPassword = require("../../middleware/bcrypt");
 const rules = [
   body("email")
     .notEmpty()
     .withMessage("Campo vacio")
-    .isLength({ max: 30})
+    .isLength({ max: 30 })
     .isEmail()
     .withMessage("El correo no es validso")
     .normalizeEmail(),
@@ -19,33 +27,46 @@ const rules = [
     .notEmpty()
     .withMessage("Campo vacio")
     .isString()
-    .isLength({ min: 8, max: 15})
-    .withMessage("La contraseña debe contener 8 caracteres")
+    .isLength({ min: 8, max: 15 })
+    .withMessage("La contraseña debe contener 8 caracteres"),
 ];
 require("dotenv").config();
 
-// router.get("/test", rules, async (req, res) => {
-//   try {
-//     const foundUsers = users.filter(
-//       (user) => user.password === req.query.password
-//     );
-
-//     if (foundUsers.length === 0) {
-//       return res.status(404).json({ error: "No se encontraron usuarios" });
-//     }
-
-//     res.status(200).json(foundUsers);
-//   } catch (err) {
-//     res.status(500).json({ error: "Error interno en /test" });
-//   }
-// });
-
-router.post("/", rules,validator,hashPassword,userController);
-router.post("/username",body("email")
+router.post("/", rules, validator, hashPassword, userController);
+router.post(
+  "/username",
+  body("email")
     .notEmpty()
     .withMessage("Campo vacio")
     .isEmail()
     .withMessage("El correo no es validso")
-    .normalizeEmail(),validator,verifyToken,getUsername);
+    .normalizeEmail(),
+  validator,
+  verifyToken,
+  getUsername
+);
+
+router.post(
+  "/login",
+  body("username").notEmpty().withMessage("Nombre de usuario es requerido"),
+  body("password").notEmpty().withMessage("Contraseña es requerida"),
+  validator,
+  loginController
+);
+
+router.get('/test-secret', (req, res) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (!token) {
+    return res.status(400).json({ message: 'No token provided' });
+  }
+  jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: 'Token inválido o SECRET_KEY incorrecta', error: err.message });
+    }
+    return res.json({ message: 'El token fue firmado con la SECRET_KEY correcta', decoded });
+  });
+});
+
 
 module.exports = router;
