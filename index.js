@@ -1,4 +1,5 @@
 const express = require("express");
+const logger = require("./src/utils/logger")
 let app = express();
 const port = 3000;
 require("dotenv").config();
@@ -11,6 +12,8 @@ app.use(helmet());
 app.use(express.json());   
 app.use("/users", routes);
 
+
 app.listen(port, () => {
-  console.log("servidor corriendo en el puerto " + port);
+  logger.info("servidor corriendo en el puerto " + port);
+  logger.error("Este es un log de prueba para ver si se escribe en error.log");
 });
