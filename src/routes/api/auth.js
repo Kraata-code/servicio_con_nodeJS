@@ -44,7 +44,7 @@ require("dotenv").config();
  *           schema:
  *             type: object
  *             properties:
- *                username:
+ *               username:
  *                  type: string
  *                  description: usuario del nuevo usuario
  *                  example: "pepito123"
