@@ -6,10 +6,13 @@ require("dotenv").config();
 const routes = require("./src/routes/api/auth");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const swaggerUI = require("swagger-ui-express");
+const specs = require("./swagger/swagger"); // Asegúrate de exportar specs como CommonJS también
 
 app.use(morgan("dev"));    
 app.use(helmet());          
-app.use(express.json());   
+app.use(express.json());
+app.use("/api-docs",swaggerUI.serve, swaggerUI.setup(specs))
 app.use("/users", routes);
 
 
